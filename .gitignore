@@ -1,0 +1,73 @@
+#
+# Ignore compiler generated files
+#
+*.o
+*.a
+*.o.d
+
+#
+# Ignore generated executables and other generated files
+#
+.*
+*.a
+*.asn1.[ch]
+*.bin
+*.bz2
+*.c.[012]*.*
+*.dt.yaml
+*.dtb
+*.dtb.S
+*.dwo
+*.elf
+*.gcno
+*.gz
+*.i
+*.ko
+*.lex.c
+*.ll
+*.lst
+*.lz4
+*.lzma
+*.lzo
+*.mod
+*.mod.c
+*.ns_deps
+*.o
+*.o.*
+*.patch
+*.s
+*.so
+*.so.dbg
+*.su
+*.symtypes
+*.tab.[ch]
+*.tar
+*.xz
+
+#
+# tar directory (make tar*-pkg)
+#
+/tar-install/
+
+#
+# We don't want to ignore the following even if they are dot-files
+#
+!.gitattributes
+!.gitignore
+!.mailmap
+
+# stgit generated dirs
+patches-*
+
+# quilt's files
+patches
+series
+
+# cscope files
+cscope.*
+ncscope.*
+
+*.orig
+*~
+\#*#
+
