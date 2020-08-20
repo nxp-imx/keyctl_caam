@@ -32,7 +32,7 @@
 #define MIN_KEY_SIZE		16
 #define MAX_KEY_SIZE		64
 /* Tagged keys header size. */
-#define TAG_OVERHEAD_SIZE	16
+#define TAG_OVERHEAD_SIZE	20
 /*
  * A CCM Black key is a multiple of 8 byte, at least the size of the key
  * plus 6 byte for the nonce and 6 byte for the IV
@@ -44,16 +44,17 @@
 #define MAX_BLACK_KEY_SIZE	(MAX_KEY_SIZE + CCM_OVERHEAD +\
 				 TAG_OVERHEAD_SIZE)
 
-/* Define space required for BKEK + MAC tag storage in any blob */
+/* Define space required for blob key + MAC tag storage in any blob */
 #define BLOB_OVERHEAD		(32 + 16)
-/* Define space required for type bitfield stored in any blob */
-#define BLOB_HEADER_SIZE	4
+
 /*
- * Blob size is max key size, blob header added by CAAM
- * and the 4 bytes type as blob header size.
+ * For blobs a randomly-generated, 256-bit blob key is used to
+ * encrypt the data using the AES-CCM cryptographic algorithm.
+ * Therefore, blob size is max key size, CCM_OVERHEAD, blob header
+ * and MAC tag added by CAAM and the tagged object header size.
  */
-#define MAX_BLOB_SIZE		(MAX_KEY_SIZE + BLOB_OVERHEAD +\
-				 BLOB_HEADER_SIZE)
+#define MAX_BLOB_SIZE		(MAX_KEY_SIZE + CCM_OVERHEAD +\
+				 BLOB_OVERHEAD + TAG_OVERHEAD_SIZE)
 
 int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
 		       char *key_value);
