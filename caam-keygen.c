@@ -175,6 +175,7 @@ int caam_keygen_import(char *blob_name, char *key_name)
 	if (fread((void *)(uintptr_t)param.blob, 1, blob_file_size, f_blob) !=
 	    blob_file_size) {
 		printf("Failed to read blob from file.\n");
+		fclose(f_blob);
 		goto error_param_blob;
 	}
 
