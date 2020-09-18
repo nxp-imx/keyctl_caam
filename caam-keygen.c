@@ -145,6 +145,12 @@ int caam_keygen_import(char *blob_name, char *key_name)
 	int ret = -1;
 	size_t blob_file_size = 0;
 
+	/* Validate arguments for import operation */
+	if (!blob_name || !key_name) {
+		printf("Invalid arguments for import operation.\n");
+		return ret;
+	}
+
 	/* Get blob file size */
 	if (stat(blob_name, &blob_st)) {
 		printf("Failed to get blob file status.\n");
