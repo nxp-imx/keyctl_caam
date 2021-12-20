@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2021 NXP
  */
 
 #ifndef CAAM_KEYGEN_PRIV_H
@@ -57,7 +57,7 @@
 				 BLOB_OVERHEAD + TAG_OVERHEAD_SIZE)
 
 int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
-		       char *key_value);
+		       char *key_value, char *text_type);
 
 int caam_keygen_import(char *blob_name, char *key_name);
 

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSD-3-Clause
 /*
- * Copyright 2020 NXP
+ * Copyright 2020, 2021 NXP
  */
 
 #include "caam-keygen.h"
@@ -12,7 +12,7 @@ void caam_keygen_usage(void)
 {
 	printf("CAAM keygen usage: caam-keygen [options]\n");
 	printf("Options:\n");
-	printf("create <key_name> <key_enc> <key_mode> <key_val>\n");
+	printf("create <key_name> <key_enc> <key_mode> <key_val> <text_type>\n");
 	printf("\t<key_name> the name of the file that will contain the black key.\n");
 	printf("\tA file with the same name, but with .bb extension, will contain the black blob.\n");
 	printf("\t<key_enc> can be ecb or ccm\n");
@@ -20,13 +20,18 @@ void caam_keygen_usage(void)
 	printf("\t   -s generate a black key from random with the size given in the next argument\n");
 	printf("\t   -t generate a black key from a plaintext given in the next argument\n");
 	printf("\t<key_val> the size or the plaintext based on the previous argument (<key_mode>)\n");
+	printf("\t<text_type> can be -h or -p (default argument is -p)\n");
+	printf("\t   -h generate a black key from the hex text that is "
+		"provided in previous argument\n");
+	printf("\t   -p generate a black key from the plain text that is "
+		"provided in previous argument\n");
 	printf("import <blob_name> <key_name>\n");
 	printf("\t<blob_name> the absolute path of the file that contains the blob\n");
 	printf("\t<key_name> the name of the file that will contain the black key.\n");
 }
 
 int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
-		       char *key_value)
+		       char *key_value, char *text_type)
 {
 	FILE *f_key, *f_blob;
 	struct caam_keygen_cmd param;
@@ -57,11 +62,44 @@ int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
 	param.key_mode = (uintptr_t)key_mode;
 	/* add 1 for null terminator */
 	param.key_mode_len = strlen(key_mode) + 1;
+	param.key_value_len = strlen(key_value);
 
-	param.key_value = (uintptr_t)key_value;
-	/* add 1 for null terminator */
-	param.key_value_len = strlen(key_value) + 1;
+	if (!strcmp(text_type, "-p")) {
+		param.key_value = (uintptr_t)key_value;
+	} else {
+		/*
+		 * initialize the ASCII code string as half the length of
+		 * hex input.
+		 */
+		uint8_t *ascii = malloc(sizeof(uint8_t) * (param.key_value_len / 2));
 
+		memset(ascii, 0, sizeof(uint8_t) * (param.key_value_len / 2));
+		int count = 0;
+
+		if (!ascii) {
+			printf("Failed to allocate memory for hex text\n");
+			free(blob_name);
+			return ret;
+		}
+		for (size_t i = 0; i < param.key_value_len; i += 2) {
+			/* extract two characters from hex string */
+			char part[3];
+
+			part[0] = key_value[i];
+			part[1] = key_value[i + 1];
+			part[2] = '\0';
+
+			/* change it into base 16 and typecast as the uint8_t */
+			uint8_t ch = strtoul(part, NULL, 16);
+			/*
+			 * increment value of count in each iteration
+			 * add character at the end of ascii string
+			 */
+			ascii[count++] = ch;
+		}
+		param.key_value = (uintptr_t)ascii;
+		param.key_value_len = count;
+	}
 	param.black_key_len = MAX_BLACK_KEY_SIZE;
 	param.black_key = (uintptr_t)malloc(param.black_key_len);
 	if (!param.black_key) {
@@ -274,6 +312,7 @@ int main(int argc, char *argv[])
 	char *key_value = NULL;
 	char *blob_name = NULL;
 	char *key_path = NULL;
+	char *text_type = NULL;
 	struct stat st = {0};
 	int status;
 
@@ -289,6 +328,10 @@ int main(int argc, char *argv[])
 		key_enc = argv[3];
 		key_mode = argv[4];
 		key_value = argv[5];
+		if (!argv[6])
+			text_type = "-p";
+		else
+			text_type = argv[6];
 	} else if (!strcmp(op, "import")) {
 		if (argc < 4)
 			goto out_usage;
@@ -318,7 +361,8 @@ int main(int argc, char *argv[])
 	strcat(key_path, key_name);
 
 	if (!strcmp(op, "create"))
-		caam_keygen_create(key_path, key_enc, key_mode, key_value);
+		caam_keygen_create(key_path, key_enc, key_mode, key_value,
+				   text_type);
 	if (!strcmp(op, "import"))
 		caam_keygen_import(blob_name, key_path);
 
