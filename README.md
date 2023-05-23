@@ -67,9 +67,29 @@ create <key_name> <key_enc> <key_mode> <key_val>
 	   -s generate a black key from random with the size given in the next argument
 	   -t generate a black key from a plaintext given in the next argument
 	<key_val> the size or the plaintext based on the previous argument (<key_mode>)
+	<text_type> can be -h or -p (default argument is -p)
+	   -h generate a black key from the hex text that is provided in previous argument
+	   -p generate a black key from the plain text that is provided in previous argument
 import <blob_name> <key_name>
 	<blob_name> the absolute path of the file that contains the blob
 	<key_name> the name of the file that will contain the black key.
+derive  [-pass <pass_phrase>] [-md <digest>] [-S <salt>] <derived_key_name>
+	<pass_phrase> password value
+	<digest> Supported digest:-
+		 sha1
+		 sha224
+		 sha256
+		 sha384
+		 sha512
+		 Note:- Default algorithm is sha-256.
+        <salt> [Optional] The actual salt to use.
+			 8 bytes salt value needs to be provided.
+			 If salt value > 8 bytes, trim to 8 bytes.
+			 If salt_value < 8 bytes, zero padding is added.
+			 If no salt is provided, -nosalt option will be used.
+        <derived_key_name> Black key obtained after using PBKDF2
+			   derivation function.
+
 ```
 
 By default, the keys and blobs are created in KEYBLOB_LOCATION, which is /data/caam/.
@@ -87,6 +107,10 @@ By default, the keys and blobs are created in KEYBLOB_LOCATION, which is /data/c
     -s means it will generate a black key from random with the size given in the next argument
     -t means it will generate a black key from a plaintext given in the next argument
     <key_val> is the size or the plaintext based on the previous argument (<key_mode>)
+    <text_type> can be -h or -p (default argument is -p)
+    -h generate a black key from the hex text that is provided in previous argument.
+    -p generate a black key from the plain text that is provided in previous argument
+
 ```
 
 ## 2.2 Import a black key from a blob
@@ -97,6 +121,23 @@ By default, the keys and blobs are created in KEYBLOB_LOCATION, which is /data/c
   $ caam-keygen import <blob_name> <key_name>
     <blob_name> is the absolute path of the file that contains the blob
     <key_name> is the name of the file that will contain the black key.
+```
+
+## 2.3 Derive PBKDF2 based key using password and salt
+
+- Derive PBKDF2 based key using password and salt.
+- Key will be stored as black key.
+- Salt & IV will be printed on console.
+
+```
+$caam-keygen derive  [-pass <pass_phrase>] [-md <digest>] [-S <salt>] <derived_key_name>
+	<pass_phrase> password value
+	<digest> Use the specified digest to create the key from the
+		 passphrase. The default algorithm is sha-256.
+        <salt> The actual salt to use: this must be represented as a string
+	       of hex digits (default is -nosalt option).
+        <derived_key_name> Black key obtained after using PBKDF2
+			   derivation function.
 ```
 
 # 3. Use case example
@@ -213,4 +254,24 @@ For more detailed options and descriptions, refer to https://gitlab.com/cryptset
 	-rw-r--r-- 1 root root    32 Mar 18 13:46 importKey
 	-rw-r--r-- 1 root root    32 Mar 18 13:44 randomkey
 	-rw-r--r-- 1 root root    68 Mar 18 13:44 randomkey.bb
+```
+- We can also derive key using derive option:
+
+```
+$ ./caam-keygen derive -pass - -md sha256 -S 8329E1C8544FAD6F derived_key
+
+Output of above command:-
+salt=8329E1C8544FAD6F
+iv=01B49451DCD7050C3A7F1BC6B0352B0E
+
+```
+
+- Check the derived key:
+
+```
+  $ ls -l /data/caam/
+total 8
+-rw-r--r-- 1 root root  52 May 25 11:18 derived_key
+-rw-r--r-- 1 root root 112 May 25 11:18 derived_key.bb
+
 ```

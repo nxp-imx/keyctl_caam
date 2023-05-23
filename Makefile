@@ -5,18 +5,19 @@
 OBJS = caam-keygen.o
 
 TARGET = caam-keygen
-
 KEYBLOB_LOCATION ?= /data/caam/
-
+# Set path of openssl
+OPENSSL_PATH ?= ../../openssl
 CFLAGS += -O2
 CFLAGS += -DKEYBLOB_LOCATION="\"$(KEYBLOB_LOCATION)\""
-
+CFLAGS += -I$(OPENSSL_PATH)/include
 PREFIX ?= /usr
+LDFLAGS = -L $(OPENSSL_PATH) -lcrypto
 
 all : $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) $(LDFLAGS)
 
 .PHONY: install
 install: $(TARGET)

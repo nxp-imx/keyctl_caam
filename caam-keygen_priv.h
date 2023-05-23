@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 /*
- * Copyright 2020, 2021 NXP
+ * Copyright 2020, 2021, 2023 NXP
  */
 
 #ifndef CAAM_KEYGEN_PRIV_H
@@ -14,7 +14,14 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
+#include <crypto/evp.h>
 
+#define KEY_SIZE		32   /* AES-256 key size in bytes */
+#define IV_LEN			16    /* IV size in bytes */
+#define SALT_SIZE		8   /* Salt size in bytes */
+#define ITERATIONS		10000  /* Number of iterations for PBKDF2 */
+#define SUCCESS			0
+#define FAILURE			-1
 #define DEVICE_NAME		"/dev/caam-keygen"
 
 #define MKDIR_COMMAND		"mkdir -p "
@@ -57,8 +64,9 @@
 				 BLOB_OVERHEAD + TAG_OVERHEAD_SIZE)
 
 int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
-		       char *key_value, char *text_type);
+		       char *key_value, char *text_type, int key_val_length);
 
 int caam_keygen_import(char *blob_name, char *key_name);
-
+void caam_keygen_derive_key(unsigned char *salt, const char *password,
+			    const EVP_MD *digest, char *key_path);
 #endif /* CAAM_KEYGEN_PRIV_H */
