@@ -14,7 +14,7 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
-#include <crypto/evp.h>
+#include <openssl/evp.h>
 
 #define KEY_SIZE		32   /* AES-256 key size in bytes */
 #define IV_LEN			16    /* IV size in bytes */
