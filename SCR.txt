@@ -4,5 +4,5 @@ Outgoing License:            BSD-3-Clause
 License File:                LICENSE
 Type of Content:             source
 Description and comments:    NXP i.MX keyctl tool to manage CAAM Keys
-Release Location:            https://github.com/nxp-imx/keyctl_caam -b master
+Release Location:            https://github.com/nxp-imx/keyctl_caam -b lf-6.1.36_2.1.0
 Origin:                      NXP (BSD-3-Clause)
