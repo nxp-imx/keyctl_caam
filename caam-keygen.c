@@ -28,6 +28,7 @@ void caam_keygen_usage(void)
 	printf("import <blob_name> <key_name>\n");
 	printf("\t<blob_name> the absolute path of the file that contains the blob\n");
 	printf("\t<key_name> the name of the file that will contain the black key.\n");
+	printf("keyblob-location echoes the path to the keyblob location\n");
 }
 
 int caam_keygen_create(char *key_name, char *key_enc, char *key_mode,
@@ -337,6 +338,9 @@ int main(int argc, char *argv[])
 			goto out_usage;
 		blob_name = argv[2];
 		key_name = argv[3];
+	} else if (!strcmp(op, "keyblob-location")) {
+		printf("%s\n", KEYBLOB_LOCATION);
+		return 0;
 	} else {
 		goto out_usage;
 	}
