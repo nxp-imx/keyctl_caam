@@ -71,3 +71,6 @@ ncscope.*
 *~
 \#*#
 
+# Ignore generated binaries and headers.
+caam-keygen
+caam-keygen_header.h

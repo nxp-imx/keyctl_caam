@@ -1,0 +1,6 @@
+#ifndef CAMM_KEYGEN_H
+#define CAAM_KEYGEN_H
+
+#define KEYBLOB_LOCATION "@KEYBLOB_LOCATION@"
+
+#endif
