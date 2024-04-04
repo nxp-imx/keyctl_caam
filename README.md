@@ -208,7 +208,7 @@ The results are a Tagged Key and a blob files written to filesystem.
 - Activate a new device mapper, named encrypted, using dmsetup with the newly created logon key and CAAM tk transformation for black keys:
 
 ```
-  $ dmsetup -v create encrypted --table "0 $(blockdev --getsz /dev/mmcblk3p10) crypt capi:tk(cbc(aes))-plain :32:logon:logkey: 0 /dev/mmcblk3p10 0 1 sector_size:512"
+  $ dmsetup -v create encrypted --table "0 $(blockdev --getsz /dev/mmcblk3p10) crypt capi:tk(cbc(aes))-plain :36:logon:logkey: 0 /dev/mmcblk3p10 0 1 sector_size:512"
 	Name:              encrypted
 	State:             ACTIVE
 	Read Ahead:        256
