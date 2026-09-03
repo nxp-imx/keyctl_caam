@@ -2,23 +2,23 @@
   "SPDXID": "SPDXRef-DOCUMENT",
   "spdxVersion": "SPDX-2.3",
   "creationInfo": {
-    "created": "2025-11-12T07:02:34Z",
+    "created": "2026-08-25T03:43:02Z",
     "creators": [
       "Organization: NXP"
     ],
-    "licenseListVersion": "3.20"
+    "licenseListVersion": "3.28"
   },
-  "name": "keyctl_caam-LF_6.12.49_2.2.0",
+  "name": "keyctl_caam-lf-6.18.37-2.1.0",
   "dataLicense": "CC0-1.0",
-  "documentNamespace": "https://nxp.com/spdx/03ca1b53-ba43-47f8-ab74-5f78801d9fb7",
+  "documentNamespace": "https://nxp.com/spdx/b4566dd8-d3e9-48f8-aaa5-338ca0387b9c",
   "packages": [
     {
-      "SPDXID": "SPDXRef-package-03ca1b53-ba43-47f8-ab74-5f78801d9fb7",
+      "SPDXID": "SPDXRef-package-b4566dd8-d3e9-48f8-aaa5-338ca0387b9c",
       "name": "keyctl_caam",
-      "versionInfo": "LF_6.12.49_2.2.0",
-      "licenseConcluded": "(BSD-3-Clause)",
-      "licenseDeclared": "(BSD-3-Clause)",
-      "downloadLocation": "https://github.com/nxp-imx/keyctl_caam -b lf-6.12.49-2.2.0",
+      "versionInfo": "lf-6.18.37-2.1.0",
+      "licenseConcluded": "BSD-3-Clause",
+      "licenseDeclared": "BSD-3-Clause",
+      "downloadLocation": "https://github.com/nxp-imx/keyctl_caam -b lf-6.18.37-2.1.0",
       "originator": "Organization: NXP",
       "supplier": "NOASSERTION",
       "externalRefs": [],
@@ -29,7 +29,7 @@
     {
       "spdxElementId": "SPDXRef-DOCUMENT",
       "relationshipType": "DESCRIBES",
-      "relatedSpdxElement": "SPDXRef-package-03ca1b53-ba43-47f8-ab74-5f78801d9fb7"
+      "relatedSpdxElement": "SPDXRef-package-b4566dd8-d3e9-48f8-aaa5-338ca0387b9c"
     }
   ]
 }
